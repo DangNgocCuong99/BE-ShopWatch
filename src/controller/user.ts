@@ -29,13 +29,12 @@ export const getUser: RequestHandler = async (req, res) => {
       }
 
     const record = await UserModel.find(query).countDocuments();
-    const totalPage = Math.ceil(record / limit);
 
     const data = await UserModel.find(query).skip(skip).limit(limit);
     res.send(
       dataReturn({
         items: data,
-        total: totalPage,
+        total: record,
       })
     );
   } catch (error) {

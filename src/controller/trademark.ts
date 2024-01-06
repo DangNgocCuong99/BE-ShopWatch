@@ -15,10 +15,9 @@ export const getTrademark: RequestHandler = async (req, res)=>{
         const limit = +req.query.pageSize
         const skip = (activePage -1)*limit
         const record = await trademarkModel.countDocuments()
-        const totalPage = Math.ceil(record/limit)
         const data = await trademarkModel.find({name:{$regex: name , $options :'i'}}).skip(skip).limit(limit)
         res.send(dataReturn({
-            items:data, total:totalPage
+            items:data, total:record
         }))
     } catch (error) {
         res.send(errorReturn(getErrorMessage(error)))

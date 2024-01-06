@@ -12,8 +12,7 @@ export const getMangageProduct: RequestHandler = async (req, res)=>{
         const activePage = +req.query.page
         const limit = +req.query.pageSize
         const skip = (activePage -1)*limit
-        const record = await productModel.countDocuments()
-        const totalPage = Math.ceil(record/limit)
+        const record = await productModel.countDocuments({name:{$regex: name , $options :'i'}})
         const data = await productModel.find({name:{$regex: name , $options :'i'}}).skip(skip).limit(limit)
         // console.log("🚀 ~ file: product.ts:20 ~ constgetMangageProduct:RequestHandler= ~ data:", data)
         // const listIdFavoriteProduct = (await FavoriteModel.find({userId: userId})).map((i)=> i.productId)
@@ -41,7 +40,7 @@ export const getMangageProduct: RequestHandler = async (req, res)=>{
 
     // const trademark = await trademarkModel.findById(data.trademarkId)
         res.send(dataReturn({
-            items:dataR, total:totalPage
+            items:dataR, total:record
         }))
     } catch (error) {
         res.send(errorReturn(getErrorMessage(error)))
@@ -67,6 +66,17 @@ export const detailProduct : RequestHandler = async (req, res) => {
         const cloneProduct:any = {...product} 
         const dataRe ={...cloneProduct._doc, trademark}
         res.send(dataReturn(dataRe))
+    } catch (error) {
+        res.send(errorReturn(getErrorMessage(error)))
+    }
+}
+
+export const updateProduct : RequestHandler = async (req, res) => {
+    try {
+        const id = req.params.id
+        const dataBody = req.body
+        const data = await productModel.findByIdAndUpdate(id,{...dataBody,trademarkId:dataBody.trademark})
+        res.send(dataReturn(data))
     } catch (error) {
         res.send(errorReturn(getErrorMessage(error)))
     }
