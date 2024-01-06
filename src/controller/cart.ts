@@ -54,3 +54,7 @@ export const addCart: RequestHandler = async (req, res) => {
     res.send(errorReturn(getErrorMessage(error)));
   }
 };
+
+export const removeCart : RequestHandler = async (req, res) => {
+  
+}
