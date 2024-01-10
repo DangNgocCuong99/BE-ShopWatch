@@ -56,5 +56,27 @@ export const addCart: RequestHandler = async (req, res) => {
 };
 
 export const removeCart : RequestHandler = async (req, res) => {
-  
+  try {
+    const productId = req.params.id
+    console.log(productId);
+    
+    const checkTrung = await cartModel.findOne({
+      userId: res.locals.user._id,
+      productId: productId,
+    });
+
+    if (checkTrung){
+      if (checkTrung.quantity <= 1){
+        await cartModel.findByIdAndDelete(checkTrung._id)
+        res.send(dataReturn(checkTrung, "xoa khoi gio hang"));
+      } else{
+        const data = await cartModel.findByIdAndUpdate(checkTrung._id, {
+          quantity: checkTrung.quantity - 1,
+        });
+        res.send(dataReturn(data, "giam  1 san pham"));
+      }
+    }
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
 }
