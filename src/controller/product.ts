@@ -13,7 +13,9 @@ export const getMangageProduct: RequestHandler = async (req, res)=>{
         const limit = +req.query.pageSize
         const skip = (activePage -1)*limit
         const record = await productModel.countDocuments({name:{$regex: name , $options :'i'}})
-        const data = await productModel.find({name:{$regex: name , $options :'i'}}).skip(skip).limit(limit)
+        const data = await productModel.find({name:{$regex: name , $options :'i'}})
+        // .sort({ createdAt: -1 }) lay ra create at moi nhat
+        .skip(skip).limit(limit)
         // console.log("🚀 ~ file: product.ts:20 ~ constgetMangageProduct:RequestHandler= ~ data:", data)
         // const listIdFavoriteProduct = (await FavoriteModel.find({userId: userId})).map((i)=> i.productId)
         // data.map((i)=>(
@@ -81,3 +83,14 @@ export const updateProduct : RequestHandler = async (req, res) => {
         res.send(errorReturn(getErrorMessage(error)))
     }
 }
+
+export const deleteProduct : RequestHandler = async (req, res) => {
+    try {
+        const id = req.params.id
+        const data = await productModel.findByIdAndDelete(id)
+        res.send(dataReturn(data))
+    } catch (error) {
+        res.send(errorReturn(getErrorMessage(error)))
+    }
+}
+
