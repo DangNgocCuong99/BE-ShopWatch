@@ -6,8 +6,8 @@ import { dataReturn, errorReturn, getErrorMessage } from "../ulti/hook";
 export const getCart: RequestHandler = async (req, res) => {
   try {
     const data = await cartModel.find({ userId: res.locals.user._id });
-
     const listIdProduct = data.map((i) => i.productId);
+
     const dataProduct = await ProductModel.find({
       _id: {
         $in: listIdProduct,
@@ -20,7 +20,7 @@ export const getCart: RequestHandler = async (req, res) => {
     const dataRe = cloneArr.map((i) => {
       return {
         ...i._doc,
-        quantity: data.find((j) => j.productId.equals(i._id)).quantity,
+        quantity: data.find((j) => j.productId?.equals(i._id)).quantity,
       };
     });
 
@@ -76,6 +76,24 @@ export const removeCart : RequestHandler = async (req, res) => {
         res.send(dataReturn(data, "giam  1 san pham"));
       }
     }
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+}
+
+export const deleteProductInCart : RequestHandler = async (req, res) => {
+  try {
+    const productId = req.params.id
+    console.log(productId);
+    
+    const checkTrung = await cartModel.findOne({
+      userId: res.locals.user._id,
+      productId: productId,
+    });
+
+    await cartModel.findByIdAndDelete(checkTrung._id)
+        res.send(dataReturn(checkTrung, "xoa khoi gio hang"));
+
   } catch (error) {
     res.send(errorReturn(getErrorMessage(error)));
   }
