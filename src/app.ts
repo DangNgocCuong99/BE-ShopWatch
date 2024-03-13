@@ -11,6 +11,10 @@ import routerImg from './route/image';
 import routerProduct from './route/product';
 import routerTrademark from './route/trademark';
 import routerCart from './route/cart';
+import routerInvoice from './route/invoice';
+
+import cookieParser from 'cookie-parser';
+import routerFavorite from './route/favorite';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) { //noi luu anh
@@ -33,6 +37,8 @@ dotenv.config();
 const {DATABASE_USERNAME,DATABASE_LOCAL,LOCALHOST,DATABASE_PASSWORD,DATABASE,MODE} = process.env
 
 const app = express()
+app.use(cookieParser());
+
 const port = process.env.PORT || 3008
 
 const DB = MODE === "online" ? DATABASE.replace(
@@ -40,7 +46,7 @@ const DB = MODE === "online" ? DATABASE.replace(
     DATABASE_PASSWORD
 ).replace("<username>", DATABASE_USERNAME) : DATABASE_LOCAL.replace("localhost", LOCALHOST);
 
-app.use(cors({}));
+app.use(cors({ origin:"http://localhost:8080",credentials:true}));
 app.use(express.json());
 app.use(bodyParser.json());
 
@@ -54,6 +60,8 @@ app.use("/images", routerImg)
 app.use('/product', routerProduct)
 app.use('/trademark', routerTrademark)
 app.use('/cart', routerCart)
+app.use('/invoice',routerInvoice)
+app.use('/favorite', routerFavorite)
 
 app.use(function (req, res) {
     res.status(404).send({ url: req.originalUrl + " not found" });

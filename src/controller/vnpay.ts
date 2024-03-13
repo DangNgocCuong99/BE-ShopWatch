@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import moment from 'moment';
 import querystring from 'qs'
 import crypto from 'crypto';
+import InvoiceModel from '../model/invoice';
 export const createPaymentUrl: RequestHandler = async (req, res) => {
   
     process.env.TZ = 'Asia/Ho_Chi_Minh';
@@ -18,8 +19,10 @@ export const createPaymentUrl: RequestHandler = async (req, res) => {
     let vnpUrl = process.env.vnp_Url
     const returnUrl = process.env.vnp_ReturnUrl
     const orderId = moment(date).format('DDHHmmss');
-    const amount = req.body.amount;
-    const bankCode = req.body.bankCode;
+    // const bankCode = req.body.bankCode;
+    const idInvoice = req.body.invoice;
+    const invoice = await InvoiceModel.findById(idInvoice)
+
     
     let locale = req.body.language;
     if(locale === null || locale === '' || !locale){
@@ -33,15 +36,15 @@ export const createPaymentUrl: RequestHandler = async (req, res) => {
     vnp_Params['vnp_Locale'] = locale;
     vnp_Params['vnp_CurrCode'] = currCode;
     vnp_Params['vnp_TxnRef'] = orderId;
-    vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
+    vnp_Params['vnp_OrderInfo'] = idInvoice;
     vnp_Params['vnp_OrderType'] = 'other';
-    vnp_Params['vnp_Amount'] = amount * 100;
+    vnp_Params['vnp_Amount'] = invoice.totalAmount * 100;
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
-    if(bankCode !== null && bankCode !== ''){
-        vnp_Params['vnp_BankCode'] = bankCode;
-    }
+    // if(bankCode !== null && bankCode !== ''){
+    //     vnp_Params['vnp_BankCode'] = bankCode;
+    // }
 
     vnp_Params = sortObject(vnp_Params);
 

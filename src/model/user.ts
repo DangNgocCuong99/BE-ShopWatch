@@ -2,13 +2,15 @@ import mongoose from "mongoose";
 import { accountStatusType, roleAccountType } from "../ulti/types";
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
+  username: String,
   password: String,
-  email: { type: String },
+  email: { type: String, unique: true  },
   status: { type: String, default: accountStatusType.inactive },
   otp: { type: String,default:"" },
   role: { type: String, default: roleAccountType.user },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Number, default: Date.now },
+  refreshToken: { type: String},
+  isActive: { type: Boolean, default:true}
 });
 const UserModel = mongoose.model('user', userSchema);
 export default UserModel

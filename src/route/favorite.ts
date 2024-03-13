@@ -1,7 +1,9 @@
 import express from "express"
-import { isLoggedIn } from "../controller/auth"
-import { getFavorite } from "../controller/favorite"
+import { getFavorite, handleFavorite } from "../controller/favorite"
+import { protect } from "../controller/auth"
 const routerFavorite = express.Router()
-routerFavorite.get('/',isLoggedIn, getFavorite )
+routerFavorite.use(protect)
+routerFavorite.get('/', getFavorite )
+routerFavorite.post('/', handleFavorite)
 
 export default routerFavorite

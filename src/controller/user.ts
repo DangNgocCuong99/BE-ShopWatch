@@ -52,3 +52,14 @@ export const detailUser : RequestHandler = async (req, res) => {
         res.send(errorReturn(getErrorMessage(error)))
     }
 }
+
+export const changeActiveUser: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await UserModel.findById(id)
+    const updateUser = await UserModel.findByIdAndUpdate(id,{isActive:!user.isActive})
+    res.send(dataReturn(updateUser))
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)))
+}
+} 

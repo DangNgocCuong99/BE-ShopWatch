@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
   originalPrice: Number,
   discountedPrice: Number,
   images: [String],
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Number, default: Date.now },
   trademarkId : { type: String ,require:true },
   soHieu: String,
   xuatXu: String,
@@ -18,7 +18,10 @@ const productSchema = new mongoose.Schema({
   nieng:String,
   dayDeo:String,  
   mauMatSo:String,
-  chongNuoc:String
+  chongNuoc:String,
+  quantity:Number,
+  sold:Number,
+  view: { type: Number, default: 0 },
 });
 
 const ProductModel = mongoose.model('product', productSchema);

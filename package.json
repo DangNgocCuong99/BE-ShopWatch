@@ -26,6 +26,7 @@
     "@types/cors": "^2.8.14",
     "@types/mongoose": "^5.11.97",
     "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
