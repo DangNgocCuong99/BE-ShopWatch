@@ -4,6 +4,7 @@ import { accountStatusType, roleAccountType } from "../ulti/types";
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
+  phoneNumber: String,
   email: { type: String, unique: true  },
   status: { type: String, default: accountStatusType.inactive },
   otp: { type: String,default:"" },
