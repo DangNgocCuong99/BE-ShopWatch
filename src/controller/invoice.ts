@@ -454,3 +454,13 @@ export const getDashboardChart: RequestHandler = async (req, res) => {
     res.send(errorReturn(getErrorMessage(error)));
   }
 };
+
+export const handleDeleteInvoice: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id
+    const deleteItem = await InvoiceModel.findByIdAndDelete(id)
+    res.send(dataReturn(deleteItem))
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+}

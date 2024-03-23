@@ -2,6 +2,7 @@ import express from "express";
 import {
   checkout,
   getDashboardChart,
+  handleDeleteInvoice,
   handleGetDashboardInvoice,
   handleGetDetailInvoice,
   handleGetInvoice,
@@ -18,5 +19,6 @@ routerInvoice.post("/", checkout);
 routerInvoice.get("/:id", handleGetDetailInvoice);
 routerInvoice.get("/", handleGetInvoice);
 routerInvoice.put("/:id", handleUpdateInvoice);
+routerInvoice.delete("/:id", handleDeleteInvoice);
 
 export default routerInvoice;
