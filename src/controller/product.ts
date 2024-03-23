@@ -3,11 +3,14 @@ import productModel from "../model/product";
 import { dataReturn, errorReturn, getErrorMessage } from "../ulti/hook";
 import trademarkModel from "../model/trademark";
 import ViewModel from "../model/viewProcduct";
+import FavoriteModel from "../model/favorite";
 // import FavoriteModel from "../model/favorite"
 
 export const getMangageProduct: RequestHandler = async (req, res) => {
   try {
-    // const userId =123
+    console.log(res.locals.user._id);
+    
+    const userId = res.locals.user._id
     const name = req.query.name || "";
     const activePage = +req.query.page;
     const limit = +req.query.pageSize;
@@ -20,15 +23,11 @@ export const getMangageProduct: RequestHandler = async (req, res) => {
       // .sort({ createdAt: -1 }) lay ra create at moi nhat
       .skip(skip)
       .limit(limit);
-    // console.log("🚀 ~ file: product.ts:20 ~ constgetMangageProduct:RequestHandler= ~ data:", data)
-    // const listIdFavoriteProduct = (await FavoriteModel.find({userId: userId})).map((i)=> i.productId)
-    // data.map((i)=>(
-    //     {
-    //         ...data,
-    //         favorite: listIdFavoriteProduct.includes(i._id)
-    //     }\
 
-    // ))
+
+      const favorites = await FavoriteModel.find({ userId });
+      const favoriteProductIds = new Set(favorites.map(favorite => favorite.productId.toString()));
+
     const idTrademark = data.map((i) => i.trademarkId);
     const listTrademark = await trademarkModel.find({
       _id: { $in: idTrademark },
@@ -36,14 +35,11 @@ export const getMangageProduct: RequestHandler = async (req, res) => {
 
     const dataR = data.map((i) => {
       return {
-        _id: i._id,
-        name: i.name,
-        discountedPrice: i.discountedPrice,
-        originalPrice: i.originalPrice,
-        images: i.images,
+        ...i.toObject(),
         trademark: listTrademark.find(
           (value) => value._id.toString() == i.trademarkId
         ),
+        favorite: favoriteProductIds.has(i._id.toString())
       };
     });
 

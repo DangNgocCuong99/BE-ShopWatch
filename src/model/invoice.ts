@@ -21,6 +21,8 @@ const invoiceSchema = new mongoose.Schema({
   address:String,
   userName:String,
   phone:String,
+  note:String,
+  email:String,
   createdAt: { type: Number, default: Date.now }
 });
 

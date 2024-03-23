@@ -104,8 +104,8 @@ export const login: RequestHandler = async (req, res) => {
         httpOnly: true,
         secure: req.secure || req.headers["x-forwarded-proto"] == "https",
       });
-      await UserModel.findByIdAndUpdate(check.data.userId,{$set:{refreshToken:refreshToken}})
-      res.status(check.statusCode).send(dataReturn(token, check.message));
+      const user = await UserModel.findByIdAndUpdate(check.data.userId,{$set:{refreshToken:refreshToken}})
+      res.status(check.statusCode).send(dataReturn({token,role:user.role}, check.message));
     } else {
       res
         .status(check.statusCode)
