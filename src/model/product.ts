@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
   chongNuoc:String,
   quantity:Number,
   sold:Number,
-  view: { type: Number, default: 0 },
+  weight:String,
 });
 
 const ProductModel = mongoose.model('product', productSchema);

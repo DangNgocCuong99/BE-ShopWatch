@@ -1,34 +1,43 @@
 export type IDataReturn = {
-    status:boolean,
-    data:unknown,
-    message?:string,
-    statusCode:number
-}
+  status: boolean;
+  data: unknown;
+  message?: string;
+  statusCode: number;
+};
 
 export type IErrorReturn = {
-    status:boolean,
-    message?:string,
-    statusCode?:number
-}
+  status: boolean;
+  message?: string;
+  statusCode?: number;
+};
 
 export enum accountStatusType {
-    inactive="inactive" ,
-    active="active" ,
-  }
+  inactive = "inactive",
+  active = "active",
+}
 export enum roleAccountType {
-    admin="admin",
-    user="user"
+  admin = "admin",
+  user = "user",
 }
 
 export enum statusPayment {
-    paid="paid",
-    unpaid="unpaid",
-    cash="cash"
+  paid = "paid",
+  unpaid = "unpaid",
+  cash = "cash",
 }
 
 export enum statusInvoice {
-    cancelled="cancelled",
-    completed="completed",
-    processing="processing",
-    todo="todo"
+  cancelled = "cancelled",
+  completed = "completed",
+  processing = "processing",
+  todo = "todo",
+}
+
+export enum sortProduct {
+  nameUp = "nameUp",
+  nameDown = "nameDown",
+  priceUp = "priceUp",
+  priceDown = "priceDown",
+  createdAtUp = "createdAtUp",
+  createdAtDown = "createdAtDown",
 }
