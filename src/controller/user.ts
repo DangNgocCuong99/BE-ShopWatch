@@ -53,6 +53,15 @@ export const detailUser : RequestHandler = async (req, res) => {
     }
 }
 
+export const getCurrentUser : RequestHandler = async (req, res) => {
+  try {
+      const user = await UserModel.findOne({_id:  res.locals.user._id})
+      res.send(dataReturn(user))
+  } catch (error) {
+      res.send(errorReturn(getErrorMessage(error)))
+  }
+}
+
 export const changeActiveUser: RequestHandler = async (req, res) => {
   try {
     const id = req.params.id;
