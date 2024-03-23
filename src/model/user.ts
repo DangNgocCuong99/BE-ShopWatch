@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   username: String,
   password: String,
   phoneNumber: String,
+  address: String,
   email: { type: String, unique: true  },
   status: { type: String, default: accountStatusType.inactive },
   otp: { type: String,default:"" },
