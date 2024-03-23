@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import productModel from "../model/product";
 import { dataReturn, errorReturn, getErrorMessage } from "../ulti/hook";
 import trademarkModel from "../model/trademark";
+import ViewModel from "../model/viewProcduct";
 // import FavoriteModel from "../model/favorite"
 
 export const getMangageProduct: RequestHandler = async (req, res) => {
@@ -98,11 +99,18 @@ export const detailProductByShop: RequestHandler = async (req, res) => {
     if (!product) {
       return res.status(404).send({ message: "Product not found" });
     }
-    // Tăng số lượt xem lên 1
-    product.view = (product.view || 0) + 1;
+    // const view = await ViewModel.findOne({productId: product.id})
+    // if (view){
+    //   view.quantity = view.quantity + 1
+    //   await view.save()
+    // }else{
+    await ViewModel.create({productId: product.id})
+    // }
+    // // Tăng số lượt xem lên 1
+    // product.view = (product.view || 0) + 1;
 
-    // Lưu sản phẩm đã cập nhật với số lượt xem mới vào cơ sở dữ liệu
-    await product.save();
+    // // Lưu sản phẩm đã cập nhật với số lượt xem mới vào cơ sở dữ liệu
+    // await product.save();
     const trademark = await trademarkModel.findOne({
       _id: product.trademarkId,
     });
@@ -138,3 +146,4 @@ export const deleteProduct: RequestHandler = async (req, res) => {
     res.send(errorReturn(getErrorMessage(error)));
   }
 };
+

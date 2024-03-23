@@ -46,7 +46,7 @@ const DB = MODE === "online" ? DATABASE.replace(
     DATABASE_PASSWORD
 ).replace("<username>", DATABASE_USERNAME) : DATABASE_LOCAL.replace("localhost", LOCALHOST);
 
-app.use(cors({ origin:"http://localhost:8080",credentials:true}));
+app.use(cors({ origin:["http://localhost:8080","https://xanhtaynhatban.000webhostapp.com/"],credentials:true}));
 app.use(express.json());
 app.use(bodyParser.json());
 

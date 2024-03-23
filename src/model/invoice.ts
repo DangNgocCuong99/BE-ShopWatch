@@ -19,6 +19,7 @@ const invoiceSchema = new mongoose.Schema({
   transportFee: Number,
   discount:Number,
   address:String,
+  userName:String,
   phone:String,
   createdAt: { type: Number, default: Date.now }
 });
