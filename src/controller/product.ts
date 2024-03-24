@@ -122,13 +122,19 @@ export const getMangageProduct: RequestHandler = async (req, res) => {
         case sortProduct.priceDown:
           sortQuery = { discountedPrice: -1 };
           break;
-        case sortProduct.createdAtDown:
-          sortQuery = { createdAt: -1 };
+        case sortProduct.createdAtUp:
+          sortQuery = { createdAt: 1 };
           break;
         default:
           break;
       }
     }
+
+    // const filterQuery = { 
+    //   name: { $regex: name, $options: "i" },
+    //   dayDeo: { $regex: dayDeo, $options: "i" }, // Thêm điều kiện filter theo chất liệu
+    //   glass: { $regex: glass, $options: "i" } // Thêm điều kiện filter theo mặt kính
+    // };
 
 
     await updateBestSellingProducts()
