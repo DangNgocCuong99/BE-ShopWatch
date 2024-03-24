@@ -6,6 +6,7 @@ import trademarkModel from "../model/trademark";
 
 export const getFavorite: RequestHandler = async (req, res) => {
   try {
+    
     const activePage = +req.query.page;
     const limit = +req.query.pageSize;
     const skip = (activePage - 1) * limit;

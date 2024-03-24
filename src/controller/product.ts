@@ -101,6 +101,8 @@ async function updateHotProducts(): Promise<void> {
 
 export const getMangageProduct: RequestHandler = async (req, res) => {
   try {
+    
+    const gioiTinh = req.query.gioiTinh || "";
     const userId = res.locals.user._id
     const name = req.query.name || "";
     const activePage = +req.query.page;
@@ -141,9 +143,10 @@ export const getMangageProduct: RequestHandler = async (req, res) => {
     await updateHotProducts()
     const record = await productModel.countDocuments({
       name: { $regex: name, $options: "i" },
+      gioiTinh: { $regex: gioiTinh, $options: "i" },
     });
     const data : IProduct[]= await productModel
-      .find({ name: { $regex: name, $options: "i" } })
+      .find({ name: { $regex: name, $options: "i" } ,gioiTinh: { $regex: gioiTinh, $options: "i" },})
       .sort(sortQuery) 
       .skip(skip)
       .limit(limit);
