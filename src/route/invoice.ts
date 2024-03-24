@@ -3,6 +3,7 @@ import {
   checkout,
   getDashboardChart,
   handleDeleteInvoice,
+  handleGetCurrentInvoice,
   handleGetDashboardInvoice,
   handleGetDetailInvoice,
   handleGetInvoice,
@@ -14,6 +15,7 @@ const routerInvoice = express.Router();
 routerInvoice.get("/dashboard", handleGetDashboardInvoice);
 routerInvoice.get("/chart", getDashboardChart);
 routerInvoice.use(protect);
+routerInvoice.get("/current",handleGetCurrentInvoice)
 
 routerInvoice.post("/", checkout);
 routerInvoice.get("/:id", handleGetDetailInvoice);

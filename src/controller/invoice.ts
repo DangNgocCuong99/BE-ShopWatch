@@ -488,3 +488,26 @@ export const handleDeleteInvoice: RequestHandler = async (req, res) => {
     res.send(errorReturn(getErrorMessage(error)));
   }
 }
+
+
+export const handleGetCurrentInvoice: RequestHandler = async (req, res) => {
+  try {
+    const userId= res.locals.user._id
+    const activePage = +req.query.page;
+    const limit = +req.query.pageSize;
+    const skip = (activePage - 1) * limit;
+    const record = await InvoiceModel.countDocuments({userId:userId});
+    const data = await InvoiceModel
+      .find({userId:userId})
+      .skip(skip)
+      .limit(limit);
+      res.send(
+        dataReturn({
+          items: data,
+          total: record,
+        })
+      );
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+};
