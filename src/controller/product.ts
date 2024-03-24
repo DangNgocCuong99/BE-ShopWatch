@@ -216,28 +216,19 @@ export const detailProductByManage: RequestHandler = async (req, res) => {
 export const detailProductByShop: RequestHandler = async (req, res) => {
   try {
     const id = req.params.id;
+    const userId= res.locals.user._id
     const product = await productModel.findOne({ _id: id });
     if (!product) {
       return res.status(404).send({ message: "Product not found" });
     }
-    // const view = await ViewModel.findOne({productId: product.id})
-    // if (view){
-    //   view.quantity = view.quantity + 1
-    //   await view.save()
-    // }else{
-    await ViewModel.create({productId: product.id})
-    // }
-    // // Tăng số lượt xem lên 1
-    // product.view = (product.view || 0) + 1;
 
-    // // Lưu sản phẩm đã cập nhật với số lượt xem mới vào cơ sở dữ liệu
-    // await product.save();
+    await ViewModel.create({productId: product.id})
+    const favorite = await FavoriteModel.findOne({userId:userId,productId:id})
+
     const trademark = await trademarkModel.findOne({
       _id: product.trademarkId,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cloneProduct: any = { ...product };
-    const dataRe = { ...cloneProduct._doc, trademark };
+    const dataRe = { ...product.toObject(), trademark, isNewProject: product.isNewProject ,favorite : !!favorite};
     res.send(dataReturn(dataRe));
   } catch (error) {
     res.send(errorReturn(getErrorMessage(error)));
