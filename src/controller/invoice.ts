@@ -10,7 +10,7 @@ import UserModel from "../model/user";
 
 export const checkout: RequestHandler = async (req, res) => {
   try {
-    const { statusPayment, statusInvoice, transportFee, userName, address, phone } =
+    const { statusPayment, statusInvoice, transportFee, userName, address, phone,discount,note,email } =
       req.body;
     // Lấy dữ liệu từ giỏ hàng của người dùng
     const cartItems = await CartModel.find({ userId: res.locals.user._id });
@@ -54,8 +54,7 @@ export const checkout: RequestHandler = async (req, res) => {
           quantity: item.quantity,
           productDetails: productDetails,
           itemTotal: itemTotal,
-          address: address,
-          phone: phone,
+     
         };
       })
     );
@@ -77,6 +76,11 @@ export const checkout: RequestHandler = async (req, res) => {
       statusInvoice: statusInvoice,
       transportFee: transportFee,
       userName: userName,
+      discount:discount,
+      note:note,
+      address: address,
+      phone: phone,
+      email:email
     });
 
     // Xóa các mục trong giỏ hàng sau khi thanh toán thành công
