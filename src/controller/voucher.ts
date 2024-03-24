@@ -29,50 +29,57 @@ export const getVoucher: RequestHandler = async (req, res) => {
 };
 
 export const createVoucher: RequestHandler = async (req, res) => {
-    try {
-      const dataVoucher = req.body
-      const voucher = await VoucherModel.create(dataVoucher)
-      res.send(
-        dataReturn(voucher)
-      );
-    } catch (error) {
-      res.send(errorReturn(getErrorMessage(error)));
-    }
-  };
+  try {
+    const dataVoucher = req.body;
+    const voucher = await VoucherModel.create(dataVoucher);
+    res.send(dataReturn(voucher));
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+};
 
-  export const updateVoucher: RequestHandler = async (req, res) => {
-    try {
-      const id = req.params.id
-      const dataVoucher = req.body
-      const voucher = await VoucherModel.findByIdAndUpdate(id,dataVoucher)
-      res.send(
-        dataReturn(voucher)
-      );
-    } catch (error) {
-      res.send(errorReturn(getErrorMessage(error)));
-    }
-  };
+export const updateVoucher: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const dataVoucher = req.body;
+    const voucher = await VoucherModel.findByIdAndUpdate(id, dataVoucher);
+    res.send(dataReturn(voucher));
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+};
 
-  export const detailVoucher: RequestHandler = async (req, res) => {
-    try {
-      const id = req.params.id
-      const voucher = await VoucherModel.findById(id)
-      res.send(
-        dataReturn(voucher)
-      );
-    } catch (error) {
-      res.send(errorReturn(getErrorMessage(error)));
-    }
-  };
+export const detailVoucher: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const voucher = await VoucherModel.findById(id);
+    res.send(dataReturn(voucher));
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+};
 
-  export const deleteVoucher: RequestHandler = async (req, res) => {
-    try {
-      const id = req.params.id
-      const voucher = await VoucherModel.findByIdAndDelete(id)
-      res.send(
-        dataReturn(voucher)
-      );
-    } catch (error) {
-      res.send(errorReturn(getErrorMessage(error)));
+export const deleteVoucher: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const voucher = await VoucherModel.findByIdAndDelete(id);
+    res.send(dataReturn(voucher));
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+};
+
+export const checkVoucher: RequestHandler = async (req, res) => {
+  try {
+    const code = req.params.code;
+    const data = await VoucherModel.findOne({
+      code: code,
+    });
+    if (!data){
+        throw new Error("khong tim thay");
     }
-  };
+    res.send(dataReturn(data));
+  } catch (error) {
+    res.send(errorReturn(getErrorMessage(error)));
+  }
+};

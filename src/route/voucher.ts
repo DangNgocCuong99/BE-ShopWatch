@@ -1,8 +1,9 @@
 import express from "express"
 import { protect } from "../controller/auth"
-import { createVoucher, deleteVoucher, detailVoucher, getVoucher, updateVoucher } from "../controller/voucher"
+import { checkVoucher, createVoucher, deleteVoucher, detailVoucher, getVoucher, updateVoucher } from "../controller/voucher"
 const routerVoucher = express.Router()
 routerVoucher.use(protect)
+routerVoucher.get('/check/:code',checkVoucher)
 routerVoucher.get('/', getVoucher )
 routerVoucher.get('/:id', detailVoucher )
 routerVoucher.post('/', createVoucher)
