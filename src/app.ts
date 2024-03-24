@@ -15,6 +15,7 @@ import routerInvoice from './route/invoice';
 
 import cookieParser from 'cookie-parser';
 import routerFavorite from './route/favorite';
+import routerVoucher from './route/voucher';
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) { //noi luu anh
@@ -62,6 +63,7 @@ app.use('/trademark', routerTrademark)
 app.use('/cart', routerCart)
 app.use('/invoice',routerInvoice)
 app.use('/favorite', routerFavorite)
+app.use('/voucher',routerVoucher)
 
 app.use(function (req, res) {
     res.status(404).send({ url: req.originalUrl + " not found" });
