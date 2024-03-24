@@ -43,7 +43,8 @@ export const createVoucher: RequestHandler = async (req, res) => {
   export const updateVoucher: RequestHandler = async (req, res) => {
     try {
       const id = req.params.id
-      const voucher = await VoucherModel.findByIdAndDelete(id)
+      const dataVoucher = req.body
+      const voucher = await VoucherModel.findByIdAndUpdate(id,dataVoucher)
       res.send(
         dataReturn(voucher)
       );
@@ -66,9 +67,8 @@ export const createVoucher: RequestHandler = async (req, res) => {
 
   export const deleteVoucher: RequestHandler = async (req, res) => {
     try {
-      const dataVoucher = req.body
       const id = req.params.id
-      const voucher = await VoucherModel.findByIdAndUpdate(id,dataVoucher)
+      const voucher = await VoucherModel.findByIdAndDelete(id)
       res.send(
         dataReturn(voucher)
       );
