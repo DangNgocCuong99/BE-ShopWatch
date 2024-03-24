@@ -55,8 +55,8 @@ async function updateBestSellingProducts(): Promise<void> {
 async function updateHotProducts(): Promise<void> {
   try {
     // Tính ngày bắt đầu và kết thúc của tuần hiện tại
-    const startDate = dayjs().startOf('week').toDate();
-    const endDate = dayjs().endOf('week').toDate();
+    const startDate = dayjs().startOf('week').valueOf();
+    const endDate = dayjs().endOf('week').valueOf();
 
     // Lấy tất cả các sản phẩm
     const products: IProduct[] = await productModel.find();
@@ -101,8 +101,6 @@ async function updateHotProducts(): Promise<void> {
 
 export const getMangageProduct: RequestHandler = async (req, res) => {
   try {
-    console.log(res.locals.user._id);
-    
     const userId = res.locals.user._id
     const name = req.query.name || "";
     const activePage = +req.query.page;
