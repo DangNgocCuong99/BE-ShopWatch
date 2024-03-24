@@ -10,12 +10,32 @@ import UserModel from "../model/user";
 
 export const checkout: RequestHandler = async (req, res) => {
   try {
-    const { statusPayment, statusInvoice, transportFee, userName, address ,phone } =
+    const { statusPayment, statusInvoice, transportFee, userName, address, phone } =
       req.body;
     // Lấy dữ liệu từ giỏ hàng của người dùng
     const cartItems = await CartModel.find({ userId: res.locals.user._id });
     if (cartItems.length === 0) {
       res.send(errorReturn("Không có sản phẩm nào trong giỏ hàng"));
+      return;
+    }
+
+    // Kiểm tra xem số lượng sản phẩm có đủ không
+    const insufficientQuantityItems = [];
+    for (const item of cartItems) {
+      const productDetails = await ProductModel.findById(item.productId);
+      if (!productDetails || productDetails.quantity < item.quantity) {
+        insufficientQuantityItems.push(item.productId);
+      }
+    }
+
+    if (insufficientQuantityItems.length > 0) {
+      res.send(
+        errorReturn(
+          `Sản phẩm ${insufficientQuantityItems.join(
+            ", "
+          )} không có đủ số lượng trong kho`
+        )
+      );
       return;
     }
 
@@ -34,8 +54,8 @@ export const checkout: RequestHandler = async (req, res) => {
           quantity: item.quantity,
           productDetails: productDetails,
           itemTotal: itemTotal,
-          address:address,
-          phone:phone
+          address: address,
+          phone: phone,
         };
       })
     );
