@@ -16,7 +16,7 @@ export const getFavorite: RequestHandler = async (req, res) => {
       .find({ userId: res.locals.user._id })
       .skip(skip)
       .limit(limit);
-    console.log("🚀 ~ constgetFavorite:RequestHandler= ~ data:", data);
+
     const listIdProduct = data.map((i) => i.productId);
     const dataProduct = await ProductModel.find({
       _id: {
@@ -31,14 +31,12 @@ export const getFavorite: RequestHandler = async (req, res) => {
 
     const dataR = dataProduct.map((i) => {
       return {
-        _id: i._id,
-        name: i.name,
-        discountedPrice: i.discountedPrice,
-        originalPrice: i.originalPrice,
-        images: i.images,
+        ...i.toObject(),
         trademark: listTrademark.find(
           (value) => value._id.toString() == i.trademarkId
         ),
+        favorite: true,
+        isNewProject: i.isNewProject  
       };
     });
 
