@@ -5,30 +5,48 @@ import { dataReturn, errorReturn, getErrorMessage } from "../ulti/hook";
 
 export const getCart: RequestHandler = async (req, res) => {
   try {
-    const data = await cartModel.find({ userId: res.locals.user._id });
-    const listIdProduct = data.map((i) => i.productId);
+    const userId = res.locals.user._id;
 
-    const dataProduct = await ProductModel.find({
-      _id: {
-        $in: listIdProduct,
-      },
+    // Lấy dữ liệu giỏ hàng của người dùng
+    const cartItems = await cartModel.find({ userId });
+
+    // Lấy danh sách các ID sản phẩm trong giỏ hàng
+    const productIds = cartItems.map((item) => item.productId);
+
+    // Lấy thông tin chi tiết của các sản phẩm trong giỏ hàng
+    const productsInCart = await ProductModel.find({
+      _id: { $in: productIds },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cloneArr: any[] = [...dataProduct];
+    // Cập nhật số lượng sản phẩm trong giỏ hàng dựa trên số lượng có sẵn trong kho
+    const updatedCartItems = cartItems.map((item) => {
+      const product = productsInCart.find((p) => p._id.equals(item.productId));
+      if (product) {
+        const availableQuantity = product.quantity; // Số lượng sản phẩm có sẵn trong kho
+        if (item.quantity > availableQuantity) {
+          // Nếu số lượng trong giỏ hàng lớn hơn số lượng có sẵn trong kho
+          item.quantity = availableQuantity; // Giảm số lượng trong giỏ hàng để phù hợp
+        }
+      }
+      return item;
+    });
 
-    const dataRe = cloneArr.map((i) => {
+    // Lưu trữ lại giỏ hàng đã được cập nhật
+    await Promise.all(updatedCartItems.map((item) => item.save()));
+
+    const dataRes = productsInCart.map((product) =>{
       return {
-        ...i._doc,
-        quantity: data.find((j) => j.productId?.equals(i._id)).quantity,
-      };
-    });
+        ...product.toObject(),
+        quantity: updatedCartItems.find((j) => j.productId?.equals(product._id)).quantity,
+      }
+    })
 
-    res.send(dataReturn(dataRe));
+    res.send(dataReturn(dataRes));
   } catch (error) {
     res.send(errorReturn(getErrorMessage(error)));
   }
 };
+
 
 export const addCart: RequestHandler = async (req, res) => {
   try {
