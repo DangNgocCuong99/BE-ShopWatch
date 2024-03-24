@@ -115,12 +115,13 @@ export const handleUpdateInvoice: RequestHandler = async (req, res) => {
 
 export const handleGetInvoice: RequestHandler = async (req, res) => {
   try {
+    const statusInvoice = req.query.statusInvoice || ""
     const activePage = +req.query.page;
     const limit = +req.query.pageSize;
     const skip = (activePage - 1) * limit;
-    const record = await InvoiceModel.countDocuments();
+    const record = await InvoiceModel.countDocuments({statusInvoice: { $regex: statusInvoice, $options: "i" }});
     const data = await InvoiceModel
-      .find()
+      .find({statusInvoice: { $regex: statusInvoice, $options: "i" }})
       .skip(skip)
       .limit(limit);
       res.send(
