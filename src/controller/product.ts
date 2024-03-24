@@ -111,10 +111,10 @@ export const getMangageProduct: RequestHandler = async (req, res) => {
     if (req.query.sortBy) {
       switch(req.query.sortBy) {
         case sortProduct.nameUp:
-          sortQuery = { name: 1 };
+          sortQuery = { name: -1 };
           break;
         case sortProduct.nameDown:
-          sortQuery = { name: -1 };
+          sortQuery = { name: 1 };
           break;
         case sortProduct.priceUp:
           sortQuery = { discountedPrice: 1 };
