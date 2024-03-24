@@ -40,7 +40,7 @@ export const sendEmail = async (otp: string, emailTo: string) => {
       process.env.EMAIL_USER,
       process.env.EMAIL_PASS
     ).sendMail({
-      from: `"shop watch" ${process.env.EMAIL_USER}`, // sender address
+      from: `"NAM DUng Watch" ${process.env.EMAIL_USER}`, // sender address
       to: emailTo, // list of receivers
       subject: "Hello ✔", // Subject line
       text: `Mã otp của bạn là ${otp} . OTP sẽ hết hạn sau 1 phút`, // plain text body
