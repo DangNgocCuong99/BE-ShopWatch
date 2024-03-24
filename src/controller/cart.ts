@@ -32,20 +32,20 @@ export const getCart: RequestHandler = async (req, res) => {
 
 export const addCart: RequestHandler = async (req, res) => {
   try {
-    const { productId } = req.body;
+    const { productId , quantity } = req.body;
     const checkTrung = await cartModel.findOne({
       userId: res.locals.user._id,
       productId: productId,
     });
     if (checkTrung) {
       const data = await cartModel.findByIdAndUpdate(checkTrung._id, {
-        quantity: checkTrung.quantity + 1,
+        quantity: checkTrung.quantity + quantity,
       });
       res.send(dataReturn(data, "update thanh cong"));
     } else {
       const data = await cartModel.create({
         productId: productId,
-        quantity: 1,
+        quantity: quantity,
         userId: res.locals.user._id,
       });
       res.send(dataReturn(data, "them moi thanh cong"));
